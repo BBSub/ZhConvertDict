@@ -1,0 +1,36 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      dict:
+        type: choice
+        description: Which dict to Release
+        required: true
+        default: t2cn
+        options:
+          - t2cn
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Generate version
+        id: gen-version
+        run: |
+          version=`date +%Y%m%d%H%M%S`
+          echo "::set-output name=version::$version"
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ format('{0}-{1}', github.event.inputs.dict, steps.gen-version.outputs.version) }}
+          name: ${{ format('{0}-{1}', github.event.inputs.dict, steps.gen-version.outputs.version) }}
+          prerelease: false
+          draft: true
+          files: ${{ format('{0}.txt', github.event.inputs.dict) }}
