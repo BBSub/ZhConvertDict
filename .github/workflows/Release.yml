@@ -6,7 +6,7 @@ on:
       dict:
         type: choice
         description: Which dict to release
-        required: true
+        required: false
         default: t2cn
         options:
           - t2cn
