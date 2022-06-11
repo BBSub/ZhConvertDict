@@ -10,6 +10,9 @@ on:
         default: t2cn
         options:
           - t2cn
+  push:
+    paths-ignore:
+      - '.github/**'
 
 jobs:
   release:
