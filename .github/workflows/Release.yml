@@ -6,7 +6,7 @@ on:
       dict:
         type: choice
         description: Which dict to release
-        required: false
+        required: true
         default: t2cn
         options:
           - t2cn
@@ -23,6 +23,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Check event
+        run: |
+          dict="${{ github.event.inputs.dict }}"
+          if [ -z $dict ]; then
+            dict="t2cn"
+          fi
+          echo "DICT=$dict" >> $GITHUB_ENV
+
       - name: Generate version
         id: gen-version
         run: |
@@ -31,13 +39,13 @@ jobs:
 
       - name: Compress dict
         run: |
-          gzip -9 ${{ github.event.inputs.dict }}.txt
+          gzip -9 $DICT.txt
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ format('{0}-{1}', github.event.inputs.dict, steps.gen-version.outputs.version) }}
-          name: ${{ format('{0}-{1}', github.event.inputs.dict, steps.gen-version.outputs.version) }}
+          tag_name: ${{ format('{0}-{1}', env.dict, steps.gen-version.outputs.version) }}
+          name: ${{ format('{0}-{1}', env.dict, steps.gen-version.outputs.version) }}
           prerelease: false
           draft: true
-          files: ${{ format('{0}.txt.gz', github.event.inputs.dict) }}
+          files: ${{ format('{0}.txt.gz', env.dict) }}
