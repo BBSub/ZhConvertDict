@@ -44,8 +44,8 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ format('{0}-{1}', env.dict, steps.gen-version.outputs.version) }}
-          name: ${{ format('{0}-{1}', env.dict, steps.gen-version.outputs.version) }}
+          tag_name: ${{ format('{0}-{1}', env.DICT, steps.gen-version.outputs.version) }}
+          name: ${{ format('{0}-{1}', env.DICT, steps.gen-version.outputs.version) }}
           prerelease: false
           draft: true
-          files: ${{ format('{0}.txt.gz', env.dict) }}
+          files: ${{ format('{0}.txt.gz', env.DICT) }}
