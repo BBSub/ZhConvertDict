@@ -37,6 +37,12 @@ jobs:
           version=`date +%Y%m%d%H%M%S`
           echo "::set-output name=version::$version"
 
+      - name: Checksum
+        id: checksum
+        run: |
+          sha256sum=`sha256sum $DICT.txt | awk '{print $1}'`
+          echo "::set-output name=sha256sum::$sha256sum"
+
       - name: Compress dict
         run: |
           gzip -9 $DICT.txt
@@ -46,6 +52,7 @@ jobs:
         with:
           tag_name: ${{ format('{0}-{1}', env.DICT, steps.gen-version.outputs.version) }}
           name: ${{ format('{0}-{1}', env.DICT, steps.gen-version.outputs.version) }}
+          body: ${{ steps.checksum.outputs.sha256sum }}
           prerelease: false
           draft: true
           files: ${{ format('{0}.txt.gz', env.DICT) }}
