@@ -34,7 +34,7 @@ jobs:
       - name: Generate version
         id: gen-version
         run: |
-          version=`date +%Y%m%d%H%M%S`
+          version=`TZ=UTC-8 date +%Y%m%d%H%M%S`
           echo "::set-output name=version::$version"
 
       - name: Checksum
