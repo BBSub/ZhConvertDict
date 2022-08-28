@@ -11,6 +11,8 @@ on:
         options:
           - t2cn
   push:
+    branches:
+      - 'main'
     paths:
       - 't2cn.txt'
 
